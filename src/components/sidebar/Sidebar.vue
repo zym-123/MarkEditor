@@ -227,11 +227,9 @@ const outlineItems = computed<OutlineItem[]>(() => {
   const regex = /^(#{1,6})\s+(.+)$/gm;
   const items: OutlineItem[] = [];
   let match;
-  let lastIndex = 0;
 
   // 计算行号
   const lines = content.split('\n');
-  let lineNumber = 0;
   const lineStarts: number[] = [0];
 
   for (let i = 0; i < lines.length; i++) {
@@ -263,12 +261,10 @@ function scrollToOutlineItem(item: OutlineItem) {
   }
 
   // 找到标题行
-  const beforeTitle = content.substring(0, charOffset);
   const titleMatch = content.substring(charOffset).match(/^#{1,6}\s+.+$/m);
   if (!titleMatch) return;
 
   const titleStart = charOffset + titleMatch.index!;
-  const titleEnd = titleStart + titleMatch[0].length;
 
   // 计算标题在渲染内容中的位置（通过在预览层中添加临时标记）
   const preview = document.querySelector('.editor-preview') as HTMLElement;

@@ -137,7 +137,7 @@ export function parseBlocks(content: string): Block[] {
 
     // 列表项可以多行
     if (detectedType === 'list-item') {
-      if (currentBlockType !== 'list-item' && currentBlockType !== 'list') {
+      if (currentBlockType !== 'list-item') {
         flushBlock();
         blockStartLine = i;
       }

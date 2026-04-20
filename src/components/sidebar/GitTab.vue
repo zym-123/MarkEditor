@@ -251,7 +251,7 @@
             <button class="git-btn" @click="closeAddAccountModal">取消</button>
             <button
               class="git-btn git-btn-primary"
-              :disabled="!newAccountName.trim() || !newAccountEmail.trim() || emailDuplicateHint"
+              :disabled="!newAccountName.trim() || !newAccountEmail.trim() || !!emailDuplicateHint"
               @click="handleAddAccount"
             >
               保存
@@ -349,16 +349,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useGitStore, type FileInfo, type FileChange } from '../../stores/git';
 import { useFileTreeStore } from '../../stores/fileTree';
-import { useSettingsStore } from '../../stores/settings';
 import { useTabsStore } from '../../stores/tabs';
 import { useDocumentStore } from '../../stores/document';
 
 const gitStore = useGitStore();
 const fileTreeStore = useFileTreeStore();
-const settingsStore = useSettingsStore();
 const tabsStore = useTabsStore();
 const documentStore = useDocumentStore();
 

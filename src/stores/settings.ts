@@ -9,7 +9,6 @@ export interface RecentItem {
 }
 
 const RECENT_FILES_KEY = 'markeditor_recent_files';
-const MAX_RECENT_FILES = 10;
 
 function loadRecentFiles(): RecentItem[] {
   try {

@@ -255,16 +255,6 @@ async function openItem() {
   await openFile();
 }
 
-async function checkIsDirectory(path: string): Promise<boolean> {
-  try {
-    const { stat } = await import('@tauri-apps/plugin-fs');
-    const info = await stat(path);
-    return info.isDirectory;
-  } catch {
-    return false;
-  }
-}
-
 function getParentPath(path: string): string {
   const normalized = path.replace(/[\\/]+$/, '');
   const lastSep = Math.max(normalized.lastIndexOf('/'), normalized.lastIndexOf('\\'));
@@ -302,7 +292,7 @@ async function newFile() {
     documentStore.loadContent(result.content, filePath, result.modified_time);
   } else {
     // 在内存中创建新文件
-    const id = tabsStore.createTab(null, 'untitled.md', '');
+    tabsStore.createTab(null, 'untitled.md', '');
     documentStore.loadContent('', null, null);
   }
 }

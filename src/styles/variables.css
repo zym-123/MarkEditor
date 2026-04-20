@@ -1,0 +1,28 @@
+:root {
+  /* 浅色主题 */
+  --color-bg: #ffffff;
+  --color-text: #0f0f0f;
+  --color-accent: #646cff;
+  --color-border: #e0e0e0;
+  --color-hover: #f5f5f5;
+  --color-selection: rgba(100, 108, 255, 0.2);
+
+  /* 字体 */
+  --font-sans: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* 编辑器 */
+  --editor-font-size: 16px;
+  --editor-line-height: 1.7;
+  --editor-padding: 24px;
+  --editor-max-width: 800px;
+}
+
+[data-theme="dark"] {
+  --color-bg: #1a1a1a;
+  --color-text: #f6f6f6;
+  --color-accent: #535bf2;
+  --color-border: #333333;
+  --color-hover: #2a2a2a;
+  --color-selection: rgba(83, 91, 242, 0.3);
+}

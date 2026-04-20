@@ -13,7 +13,7 @@
 - 精心设计的编辑体验
 
 ### 双模式编辑
- ![Edit Mode](screenshots/edit-mode.png)
+ ![Edit Mode](picture/edit-mode.png)
 - **预览模式**：文档以渲染后的精美样式展示
 - **编辑模式**：显示原始 Markdown 源码
 - 通过 `Esc` 键自由切换两种模式
@@ -21,7 +21,7 @@
 - 标题、表格、代码块、列表、引用块等完美渲染
 
 ### 多标签页
-![Tabs](screenshots/tabs.png)
+![Tabs](picture/tabs.png)
 - 支持多文档同时编辑
 - 标签页支持关闭、切换
 - 文件修改状态实时显示
@@ -36,14 +36,14 @@
 ### 大纲视图
 
 
-![Outline](screenshots/outline.png)
+![Outline](picture/outline.png)
 
 - 根据文档标题（h1~h6）层级展示文档结构
 - 点击标题可快速跳转定位
 - 实时更新，跟随文档内容变化
 
 ### Git 版本控制集成
-![Git](screenshots/git.png)
+![Git](picture/git.png)
 - **内置 Git 操作**：无需离开编辑器即可完成版本控制
   - 仓库初始化
   - 文件暂存/取消暂存/全部暂存
@@ -56,13 +56,13 @@
 
 ### 最近打开文件
 
-![Recent Files](screenshots/recent.png)
+![Recent Files](picture/recent.png)
 - 记录最近打开的文件和文件夹
 - 快速访问历史记录
 - 最多保存 10 条记录
 
 ### 主题切换
-![Dark Theme](screenshots/dark-theme.png)
+![Dark Theme](picture/dark-theme.png)
 - 浅色/深色主题自由切换
 - 简洁的深色模式，适合夜间写作
 

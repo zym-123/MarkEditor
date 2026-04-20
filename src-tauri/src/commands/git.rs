@@ -1,6 +1,8 @@
 use git2::{Repository, Sort, Time, Delta};
 use serde::{Deserialize, Serialize};
 use std::process::Command;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
 use chrono::{DateTime, Utc};
 use tauri::async_runtime::spawn_blocking;
 
@@ -163,6 +165,7 @@ fn get_repository_status_sync(path: String) -> Result<RepoStatus, String> {
     // Use git status --porcelain for tracked files (fast)
     // Use -c core.quotePath=false to prevent escaping non-ASCII characters
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["-c", "core.quotePath=false", "status", "--porcelain", "-uno"])
         .current_dir(&workdir)
         .output()
@@ -202,6 +205,7 @@ fn get_repository_status_sync(path: String) -> Result<RepoStatus, String> {
     // Get untracked files using ls-files (faster than git status -uall)
     // Use -c core.quotePath=false to prevent escaping non-ASCII characters
     let untracked_output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["-c", "core.quotePath=false", "ls-files", "--others", "--exclude-standard"])
         .current_dir(&workdir)
         .output()
@@ -244,6 +248,7 @@ fn stage_files_sync(path: String, files: Vec<String>) -> Result<(), String> {
     // Use git add for staging
     for file in &files {
         let output = Command::new("git")
+            .creation_flags(0x08000000)
             .args(["add", file])
             .current_dir(&workdir)
             .output()
@@ -270,6 +275,7 @@ pub async fn unstage_files(path: String, files: Vec<String>) -> Result<(), Strin
 fn unstage_files_sync(path: String, files: Vec<String>) -> Result<(), String> {
     for file in &files {
         let output = Command::new("git")
+            .creation_flags(0x08000000)
             .args(["reset", "HEAD", "--", file])
             .current_dir(&path)
             .output()
@@ -294,6 +300,7 @@ pub async fn stage_all(path: String) -> Result<(), String> {
 
 fn stage_all_sync(path: String) -> Result<(), String> {
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["add", "-A"])
         .current_dir(&path)
         .output()
@@ -325,6 +332,7 @@ fn unstage_all_sync(path: String) -> Result<(), String> {
 
     // Use git reset which is much faster than manipulating index directly
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["reset", "HEAD", "--"])
         .current_dir(workdir_path)
         .output()
@@ -364,18 +372,21 @@ fn commit_files_sync(
 
     // Use git command for better reliability
     let _ = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "user.name", &author_name])
         .current_dir(&path)
         .output()
         .map_err(|e| e.to_string())?;
 
     let _ = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "user.email", &author_email])
         .current_dir(&path)
         .output()
         .map_err(|e| e.to_string())?;
 
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["commit", "-m", &message])
         .current_dir(&path)
         .output()
@@ -569,6 +580,7 @@ fn get_diff_sync(
         if let Some(_parent) = parent_tree {
             // Use git command to get proper patch format
             let output = Command::new("git")
+                .creation_flags(0x08000000)
                 .args(["diff-tree", "-p", &hash, "--", &file_path])
                 .current_dir(&workdir)
                 .output()
@@ -579,6 +591,7 @@ fn get_diff_sync(
         } else {
             // Initial commit - use git show
             let output = Command::new("git")
+                .creation_flags(0x08000000)
                 .args(["show", &hash, "--format=", "-p", "--", &file_path])
                 .current_dir(&workdir)
                 .output()
@@ -607,6 +620,7 @@ fn get_diff_sync(
     } else {
         // Diff between workdir and index (unstaged changes) - use git diff for proper format
         let output = Command::new("git")
+            .creation_flags(0x08000000)
             .args(["diff", "--", &file_path])
             .current_dir(&workdir)
             .output()
@@ -860,6 +874,7 @@ fn detect_git_account_sync(path: &str) -> DetectedAccount {
 
 fn read_git_config_local(repo_path: &str) -> Option<GitAccount> {
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--local", "user.name"])
         .current_dir(repo_path)
         .output()
@@ -875,6 +890,7 @@ fn read_git_config_local(repo_path: &str) -> Option<GitAccount> {
     }
 
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--local", "user.email"])
         .current_dir(repo_path)
         .output()
@@ -894,6 +910,7 @@ fn read_git_config_local(repo_path: &str) -> Option<GitAccount> {
 
 fn read_git_config_global() -> Option<GitAccount> {
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--global", "user.name"])
         .output()
         .ok()?;
@@ -908,6 +925,7 @@ fn read_git_config_global() -> Option<GitAccount> {
     }
 
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--global", "user.email"])
         .output()
         .ok()?;
@@ -939,6 +957,7 @@ pub async fn set_git_account(path: String, name: String, email: String) -> Resul
 fn set_git_account_sync(path: &str, name: &str, email: &str) -> Result<(), String> {
     // 设置 user.name
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--local", "user.name", name])
         .current_dir(path)
         .output()
@@ -951,6 +970,7 @@ fn set_git_account_sync(path: &str, name: &str, email: &str) -> Result<(), Strin
 
     // 设置 user.email
     let output = Command::new("git")
+        .creation_flags(0x08000000)
         .args(["config", "--local", "user.email", email])
         .current_dir(path)
         .output()
